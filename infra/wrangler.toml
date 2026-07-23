@@ -1,0 +1,6 @@
+name = "keepalive-worker"
+main = "cloudflare_worker.js"
+compatibility_date = "2026-07-01"
+
+[triggers]
+crons = ["*/10 * * * *"]
