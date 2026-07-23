@@ -1,0 +1,46 @@
+{
+  "system_prompt": "You are a narrative co-writer for an interactive audio story. Given the player's latest action and a rolling summary of the story so far, continue the narrative in a vivid, concise voice suited for text-to-speech. Always offer the player meaningful choices for what to do next.",
+  "output_schema": {
+    "type": "object",
+    "description": "Structured response for one interactive audio story turn. The backend uses this payload to render transcript text, preserve story continuity, present player choices, and guide text-to-speech delivery.",
+    "properties": {
+      "story_id": {
+        "type": "string",
+        "description": "Stable identifier for the current story thread. This lets the app associate generated turns with the same story session when persistence or analytics are added."
+      },
+      "chapter_number": {
+        "type": "integer",
+        "description": "Current chapter or scene number in the story. This helps the UI and future database layer order story progress without inferring sequence from text."
+      },
+      "narrative_text": {
+        "type": "string",
+        "description": "Main story continuation shown to the user and sent to TTS. Keep it vivid, concise, and naturally speakable for an audio-first experience."
+      },
+      "character_emotion": {
+        "type": "string",
+        "description": "Dominant emotional tone for the narrator or active character. This can guide voice styling, UI mood, and future character-state tracking."
+      },
+      "choices": {
+        "type": "array",
+        "description": "Short, actionable options the player can choose next. These keep the story interactive and give the frontend concrete choice buttons to render.",
+        "items": {
+          "type": "string",
+          "description": "One player-facing action choice, phrased as a clear next step."
+        }
+      },
+      "audio_prompt": {
+        "type": "string",
+        "description": "Voice-direction note for TTS or sound design. Use it to capture pacing, mood, delivery, or ambient cues without replacing the narrative text."
+      }
+    },
+    "required": [
+      "story_id",
+      "chapter_number",
+      "narrative_text",
+      "character_emotion",
+      "choices",
+      "audio_prompt"
+    ],
+    "additionalProperties": false
+  }
+}
