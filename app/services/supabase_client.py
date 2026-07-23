@@ -78,3 +78,20 @@ async def verify_jwt(token: str):
 
 async def require_current_user(authorization: str | None = Header(default=None)):
     return await verify_jwt(parse_bearer_token(authorization))
+
+
+async def check_db_connection() -> dict:
+    def _query():
+        return (
+            get_supabase()
+            .table("test_records")
+            .select("id")
+            .limit(1)
+            .execute()
+        )
+
+    response = await asyncio.to_thread(_query)
+    return {
+        "status": "ok",
+        "rows_checked": len(response.data or []),
+    }

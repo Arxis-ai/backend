@@ -5,6 +5,13 @@ export default {
     }
 
     const backendUrl = env.BACKEND_URL.replace(/\/+$/, "");
-    ctx.waitUntil(fetch(`${backendUrl}/health`));
+    ctx.waitUntil(assertHealthy(`${backendUrl}/health/db`));
   },
 };
+
+async function assertHealthy(url) {
+  const response = await fetch(url);
+  if (!response.ok) {
+    throw new Error(`Health check failed with status ${response.status}`);
+  }
+}
